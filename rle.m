@@ -1,9 +1,9 @@
-function rle_zip = rle(v)
-    [h w] = size(v);
-    if w == 0
-        rle_zip = [];
-    else
-        [count, value] = runlength(v);
-        rle_zip = zip(count, value);
+function output_block = rle(input_block)
+    output_block = {};
+    channels = size(input_block)(3);
+    
+    for i = 1 : channels
+        [count, value] = runlength(input_block(:, :, i)(:));
+        output_block(i) = zip(count, value);
     end
 end
