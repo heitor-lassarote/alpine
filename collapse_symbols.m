@@ -1,14 +1,6 @@
-%TODO
-
 function [symbols, probabilities] = collapse_symbols(data)
-    count = numel(data);
+    data = sort(data);
+    symbols = unique(data);
     
-    map = [];
-    
-    for i = 1:count
-        key = data(i);
-        map(key) = map(key) + 1;
-    end
-    
-    map = map ./ count;
+    probabilities = histcount(data) ./ numel(data);
 end

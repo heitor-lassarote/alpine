@@ -1,3 +1,5 @@
+% https://github.com/lostpfg/Huffman-Matlab
+
 function raw_format = alpine_encode(input_img, quality = 100)
     pkg load image          % rgb2ycbcr
     pkg load signal         % dct2, idct2
@@ -19,12 +21,9 @@ function raw_format = alpine_encode(input_img, quality = 100)
     thresholds = forcell(@(b) forelement(@(a) qconvolution(a, quality), b), dcts);
     zigzag_blocks = forcell(@(b) zigzagb(b), thresholds);
     rle_blocks = forcell(@(b) rle(b), zigzag_blocks);
-    data = expand_blocks(rle_blocks)
-    %[symbols, probabilities] = collapse_symbols(data);
-    %dict = huffmandict(symbols, probabilities);
-    %encoded_data = huffmanenco(data, dict);
-    %raw_format = { [h w p], dict, encoded_data };
-    
-    %idcts = forcell(@(b) flatten_image(idct2(b)), rle_blocks);
-    %img = cell2mat(idcts);
+    data = flatten_blocks(rle_blocks);
+    [symbols, probabilities] = collapse_symbols(data);
+    dict = huffmandict_(symbols, probabilities);
+    encoded_data = huffmanenco_(data, dict);
+    raw_format = { [h w p], quality, dict, encoded_data };
 end
