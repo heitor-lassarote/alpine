@@ -1,7 +1,10 @@
 function blocks = iflatten_blocks(data, size_block_h, size_block_w, channels)
     [~, d_size] = size(data);
     
-    size_h = size(size_block_h)(2) * size(size_block_w)(2);
+    sz0 = size(size_block_h);
+    sz1 = size(size_block_w);
+    
+    size_h = sz0(2) * sz1(2);
     
     current_channel = 0;
     blocks = {};

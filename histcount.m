@@ -3,7 +3,7 @@ function counts = histcount(ordered_array)
     
     counts = zeros(1, sz);
     
-    if (sz != 0)
+    if (sz ~= 0)
       x = ordered_array(1);
       k = 1;
       

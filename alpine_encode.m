@@ -1,12 +1,11 @@
 % https://github.com/lostpfg/Huffman-Matlab
 
-function raw_format = alpine_encode(input_img, quality = 100)
-    pkg load image          % rgb2ycbcr
-    pkg load signal         % dct2, idct2
-    pkg load miscellaneous  % zigzag
-    pkg load communications % dpcmenco, huffmandict, huffmanenco
+function raw_format = alpine_encode(input_img, quality)
+    if nargin == 1
+        quality = 100;
+    end
     
-    forcell = @(f, c) cellfun(f, c, "UniformOutput", false);
+    forcell = @(f, c) cellfun(f, c, 'UniformOutput', false);
     
     [h w p] = size(input_img);
     
@@ -15,14 +14,14 @@ function raw_format = alpine_encode(input_img, quality = 100)
     
     [size_block_h size_block_w] = compute_block_size(h, w, 8, 8);
     
-    blocks = mat2cell(img, size_block_h, size_block_w);
+    blocks = mat2cell(img, size_block_h, size_block_w, 3);
     dcts = forcell(@(b) dct2_channels(b), blocks);
     thresholds = forcell(@(b) qconvolution(b, quality), dcts);
     zigzag_blocks = forcell(@(b) zigzagb(b), thresholds);
     rle_blocks = forcell(@(b) rle(b), zigzag_blocks);
     data = flatten_blocks(rle_blocks);
     [symbols, probabilities] = collapse_symbols(data);
-    dict = huffmandict_(symbols, probabilities);
-    encoded_data = huffmanenco_(data, dict);
+    dict = huffmandict(symbols, probabilities);
+    encoded_data = huffmanenco(data, dict);
     raw_format = { [h w p], quality, dict, encoded_data };
 end

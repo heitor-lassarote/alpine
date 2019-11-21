@@ -3,7 +3,8 @@ function output_data = flatten_blocks(blocks)
     
     for i = 1:numel(blocks)
         b = blocks{i};
-        channels = size(b)(2);
+        szi = size(b);
+        channels = szi(2);
         
         for j = 1:channels
             c = cell2mat(b(j));
