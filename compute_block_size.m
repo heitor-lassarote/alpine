@@ -17,10 +17,12 @@ function [size_block_h size_block_w] = compute_block_size(h, w, bh, bw)
     rw = rem(w, bw);
     
     if rh > 0
-        size_block_h(size(size_block_h) + 1) = rh;
+        [h w] = size(size_block_h);
+        size_block_h(w + 1) = rh;
     end
     
     if rw > 0
-        size_block_w(size(size_block_w) + 1) = rw;
+        [h w] = size(size_block_w);
+        size_block_w(w + 1) = rw;
     end
 end

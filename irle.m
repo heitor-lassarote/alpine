@@ -1,9 +1,6 @@
 function output_block = irle(input_block)
-    output_block = {};
-    channels = size(input_block)(3);
-    
-    for i = 1 : channels
-        [count, value] = runlength(input_block(:, :, i)(:));
-        output_block(i) = zip(count, value);
-    end
+    index = input_block(1);
+    rles = input_block(2:2:end);
+    output_block = cellfun(@(c) irunlength(c), rles, "UniformOutput", false);
+    output_block = {output_block index};
 end

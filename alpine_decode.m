@@ -6,7 +6,6 @@ function output_img = alpine_decode(raw_format)
     pkg load miscellaneous  % zigzag
     pkg load communications % dpcmenco, huffmandict, huffmanenco
     
-    forelement = @(f, c) arrayfun(f, c);
     forcell = @(f, c) cellfun(f, c, "UniformOutput", false);
     
     img_size = raw_format{1};
@@ -18,10 +17,12 @@ function output_img = alpine_decode(raw_format)
     
     data = huffmandeco_(encoded_data, dict);
     
-    rle_blocks = iflatten_blocks(data, size_block_h, size_block_w); %TODO
-    zigzag_blocks = forcell(@(b) irle(b), rle_blocks); %TODO
-    thresholds = forcell(@(b) izigzagb(b), zigzag_blocks); %TODO
-    dcts = forcell(@(b) forelement(@(a) iqconvolution(a, quality), b), thresholds); %TODO
-    blocks = forcell(@(b) idct2(b), dcts); %TODO
-    output_img = ycbcr2rgb(uint8(cell2mat(blocks) + 128));
+    rle_blocks = iflatten_blocks(data, size_block_h, size_block_w, img_size(3));
+    zigzag_blocks = forcell(@(b) irle(b), rle_blocks);
+    thresholds = forcell(@(b) izigzagb(b, size_block_h, size_block_w), zigzag_blocks);
+    dcts = forcell(@(b) forcell(@(a) iqconvolution(a, quality), b), thresholds);
+    blocks = forcell(@(b) forcell(@(a) idct2(a), b), dcts);
+    merged_blocks = forcell(@(c) merge_blocks(c), blocks);
+    img = cells2mat(merged_blocks, size_block_h, size_block_w) + 128
+    output_img = ycbcr2rgb(uint8(img));
 end
