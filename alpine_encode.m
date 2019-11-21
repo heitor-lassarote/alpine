@@ -10,8 +10,8 @@ function raw_format = alpine_encode(input_img, quality = 100)
     
     [h w p] = size(input_img);
     
-    img = chroma_subsampling(input_img)
-    img = int8(img) - 128;
+    img = chroma_subsampling(input_img);
+    img = double(img) - 128;
     
     [size_block_h size_block_w] = compute_block_size(h, w, 8, 8);
     

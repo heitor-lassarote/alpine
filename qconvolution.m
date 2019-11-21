@@ -14,6 +14,6 @@ function output_block = qconvolution(input_block, quality)
     quality_kernel = factor * quality_kernel(1:block_size(1), 1:block_size(2));
     
     for i = 1:block_size(3)
-        output_block(:, :, i) = (input_block(:, :, i) ./ quality_kernel);
+        output_block(:, :, i) = round(input_block(:, :, i) ./ quality_kernel);
     end
 end

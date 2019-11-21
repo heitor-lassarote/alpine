@@ -23,6 +23,6 @@ function output_img = alpine_decode(raw_format)
     dcts = forcell(@(b) forcell(@(a) iqconvolution(a, quality), b), thresholds);
     blocks = forcell(@(b) forcell(@(a) idct2(a), b), dcts);
     merged_blocks = forcell(@(c) merge_blocks(c), blocks);
-    img = cells2mat(merged_blocks, size_block_h, size_block_w) + 128
-    output_img = ycbcr2rgb(uint8(img));
+    img = cells2mat(merged_blocks, size_block_h, size_block_w);
+    output_img = ycbcr2rgb(uint8(img + 128));
 end
